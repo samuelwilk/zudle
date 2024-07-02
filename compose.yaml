@@ -1,0 +1,71 @@
+services:
+  php:
+    image: ${IMAGES_PREFIX:-}app-php
+    restart: unless-stopped
+    environment:
+      SERVER_NAME: ${SERVER_NAME:-localhost}, php:80
+      MERCURE_PUBLISHER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET:-!ChangeThisMercureHubJWTSecretKey!}
+      MERCURE_SUBSCRIBER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET:-!ChangeThisMercureHubJWTSecretKey!}
+      TRUSTED_PROXIES: ${TRUSTED_PROXIES:-127.0.0.0/8,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16}
+      TRUSTED_HOSTS: ${TRUSTED_HOSTS:-^${SERVER_NAME:-example\.com|localhost}|php$$}
+      MERCURE_URL: ${CADDY_MERCURE_URL:-http://php/.well-known/mercure}
+      MERCURE_PUBLIC_URL: ${CADDY_MERCURE_PUBLIC_URL:-https://${SERVER_NAME:-localhost}/.well-known/mercure}
+      MERCURE_JWT_SECRET: ${CADDY_MERCURE_JWT_SECRET:-!ChangeThisMercureHubJWTSecretKey!}
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+    ports:
+      # HTTP
+      - target: 80
+        published: ${HTTP_PORT:-80}
+        protocol: tcp
+      # HTTPS
+      - target: 443
+        published: ${HTTPS_PORT:-443}
+        protocol: tcp
+      # HTTP/3
+      - target: 443
+        published: ${HTTP3_PORT:-443}
+        protocol: udp
+
+# Mercure is installed as a Caddy module, prevent the Flex recipe from installing another service
+###> symfony/mercure-bundle ###
+###< symfony/mercure-bundle ###
+
+###> doctrine/doctrine-bundle ###
+  database:
+    # Uncomment for PostgreSQL
+    #image: postgres:${DB_TAG:-16}-alpine
+    # Uncomment for MySQL
+    #image: mysql:${DB_TAG:-8}-alpine
+    # Uncomment for MariaDB
+    image: mariadb:${DB_TAG:-10.6}
+    # Uncomment for MS SQL Server
+    #image: mcr.microsoft.com/mssql/server:${DB_TAG}
+    ports:
+      - "33450:${DB_PORT}"
+    environment:
+      # --- Uncomment for PostgreSQL ---
+      #POSTGRES_DB: ${DB_NAME:-app}
+      #POSTGRES_USER: ${DB_USER:-app}
+      #POSTGRES_PASSWORD: ${DB_PASSWORD:-!ChangeMe!}
+      # --- Uncomment for MySQL ---
+#      DATABASE_URL: ${DATABASE_URL}
+      MYSQL_DATABASE: ${DB_NAME:-app}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-!ChangeMe!}
+      MYSQL_USER: ${DB_USER:-app}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-!ChangeMe!}
+      # --- Uncomment for MS SQL Server ---
+      #ACCEPT_EULA: "Y"
+      #MSSQL_SA_PASSWORD: ${DB_PASSWORD:-!ChangeMe!}
+    volumes:
+      # --- Uncomment for PostgreSQL ---
+      #- database_data:/var/lib/postgresql/data:rw
+      # --- Uncomment for MySQL or MariaDB---
+      - database_data:/var/lib/mysql:rw
+volumes:
+  caddy_data:
+  caddy_config:
+  database_data:
+
+###< doctrine/doctrine-bundle ###
