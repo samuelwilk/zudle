@@ -153,3 +153,8 @@ package.tar
 /database/*
 
 
+
+###> symfony/asset-mapper ###
+/public/assets/
+/assets/vendor/
+###< symfony/asset-mapper ###

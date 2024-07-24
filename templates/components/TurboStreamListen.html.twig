@@ -1,0 +1,4 @@
+{% for entity in entities %}
+    <div {{ turbo_stream_listen(entity) }}></div>
+{% endfor %}
+

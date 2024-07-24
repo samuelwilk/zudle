@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% set currentMonth = "now"|date("F") %}
+{% set currentYear = "now"|date("Y") %}
+
+{% block body %}
+    <div class="container mx-auto p-4">
+        <h1 class="text-xl font-bold mb-4 text-zu-black dark:text-zu-white">{{ currentMonth }}, {{ currentYear }}</h1>
+        {{ include('dashboard/calendar/_calendar.html.twig') }}
+    </div>
+{% endblock %}

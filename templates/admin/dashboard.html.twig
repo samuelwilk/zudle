@@ -1,0 +1,107 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block page_title %}
+    Zudle Dashboard
+{% endblock %}
+
+{% block main %}
+    <p>
+        Select a option on the left to get started.
+    </p>
+    <hr class='pb-4' />
+    <div class='grid grid-cols-2 pb-4'>
+        <div>
+            <h3 class="mb-6 text-xl font-bold">
+                Admin Settings
+            </h3>
+            <p>
+                For general application administration. Make sure to read the notes below before making any changes.
+                <b>Don't edit this if you don't know what you are doing.</b>
+            </p>
+        </div>
+        <div>
+            <h3 class="mb-6 text-lg font-bold">
+                Advance Admin Settings
+            </h3>
+            <p>
+                For finer application control and debugging. <b>Don't edit this if you don't know what you are
+                    doing.</b>
+                Deleting or modifying these entities can cause the application to break as deeper application knowledge
+                is required. If you are unsure about your actions, please contact a developer if you need to make
+                changes to these entities.
+            </p>
+        </div>
+    </div>
+    <h3 class="mb-6 text-lg font-bold">Notes:</h3>
+    <div class="relative overflow-x-auto pb-4">
+        <table class="table-auto w-full text-sm text-left">
+            <tbody>
+            <tr class="border border-slate-600">
+                <th scope="row" class="p-4 font-medium whitespace-nowrap">
+                    Deleting
+                </th>
+                <td class="border border-slate-600 p-4">
+                    Deleting items is not always as easy and straightforward as expected. For example you may notice
+                    that
+                    sometimes you can delete a School without any trouble and other times you may get an error.
+                    That is because sometimes Schools are being used by other entities in the system. Deleting these
+                    schools would destroy and remove essential information.
+                    For example all observation are linked to a School and an Observation can not be part of a school,
+                    therefor you can not delete schools if its being used by other entities.
+                    This is done out of security to prevent data you don't intend to be deleted. Also note that this is
+                    not always the case, some entities (like Surveys) will delete data that is associated with it.
+                </td>
+            </tr>
+            <tr class="border-b">
+                <th scope="row" class="border border-slate-600 px-4 font-medium whitespace-nowrap">
+                    Archiving
+                    Enabling
+                    Disabling
+                </th>
+                <td class="border border-slate-600 p-4">
+                    These all mean the same thing. Archiving a entity is a way to hide it from
+                    the system so that users don't see or can't interact with it. Note that depending on the entity,
+                    functionality can differ.
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <h3 class="mb-6 text-lg font-bold">System Roles:</h3>
+    <div class="relative overflow-x-auto">
+        <table class="table-auto w-full text-sm text-left">
+            <tbody>
+            <tr class="border-b">
+                <th scope="row" class="border border-slate-600 p-4 font-medium whitespace-nowrap">
+                    Admin
+                </th>
+                <td class="border border-slate-600 p-4">
+                    This role has access to everything.
+                </td>
+            </tr>
+            <tr class="border-b">
+                <th scope="row" class="border border-slate-600 p-4 font-medium whitespace-nowrap">
+                    User Admin
+                </th>
+                <td class="border border-slate-600 p-4">
+                    This role can view/add/edit Users and view/edit Schools.
+                    For Users, this role can edit: Email, Name, Title and School (including role).
+                    For School, this user can add and remove users (including role).
+                    This role sees all School and users within those schools.
+                </td>
+            </tr>
+            <tr class="border-b">
+                <th scope="row" class="border border-slate-600 p-4 font-medium whitespace-nowrap">
+                    User Manager
+                </th>
+                <td class="border border-slate-600 p-4">
+                    This role can view/add/edit Users and view/edit Schools.
+                    For Users, this role can edit: Email, Name and Title. Not Schools.
+                    For School, this user can add and remove users (including role).
+                    This role may only edit Schools that they are assigned to and users within those schools.
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

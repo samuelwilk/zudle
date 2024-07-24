@@ -1,0 +1,11 @@
+{# TODO: this is also used in _calendar.html.twig, would be nice to get rid of duplication #}
+{% set dayClass = 'flex items-center w-16 h-16 justify-center font-bold rounded m-1' %}
+
+{% if game.status == constant('App\\Enum\\GameStatusEnum::IN_PROGRESS') %}
+    {% set color = 'bg-in-progress text-white' %}
+{% elseif game.status == constant('App\\Enum\\GameStatusEnum::WON') %}
+    {% set color = 'bg-won text-white' %}
+{% elseif game.status == constant('App\\Enum\\GameStatusEnum::LOST') %}
+    {% set color = 'bg-lost text-white' %}
+{% endif %}
+<a href="{{ path('app_game_show', {id: game.id}) }}" class="{{ dayClass }} {{ color }} grow"></a>

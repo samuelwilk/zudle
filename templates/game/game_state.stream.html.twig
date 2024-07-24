@@ -1,0 +1,11 @@
+<turbo-stream action="update" targets="#game_{{ gameState.game.id }}">
+    <template>
+        {{ include('game/_game_state.html.twig', { gameState: gameState }) }}
+    </template>
+</turbo-stream>
+
+<turbo-stream action="update" targets="#keyboard">
+    <template>
+        {{ include('game/_game_keyboard.html.twig', { gameState: gameState }) }}
+    </template>
+</turbo-stream>

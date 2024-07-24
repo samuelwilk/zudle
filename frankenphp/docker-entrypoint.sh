@@ -1,6 +1,8 @@
 #!/bin/sh
 set -e
 
+echo "Application is running in $APP_ENV environment"
+
 if [ "$1" = 'frankenphp' ] || [ "$1" = 'php' ] || [ "$1" = 'bin/console' ]; then
 	# Install the project the first time PHP is started
 	# After the installation, the following block can be deleted
@@ -24,6 +26,19 @@ if [ "$1" = 'frankenphp' ] || [ "$1" = 'php' ] || [ "$1" = 'bin/console' ]; then
 
 	if [ -z "$(ls -A 'vendor/' 2>/dev/null)" ]; then
 		composer install --prefer-dist --no-progress --no-interaction
+	fi
+
+	# Asset Mapper
+	if [ "$APP_ENV" != "prod" ]; then
+		echo "Application is not in production mode, current mode: $APP_ENV"
+		echo "Building assets..."
+		php bin/console importmap:install
+
+		echo "Watching Tailwind for changes..."
+		(php bin/console tailwind:build --watch) &
+
+		# echo "Watching TypeScript for changes..."
+		# (php bin/console typescript:build --watch) &
 	fi
 
 	if grep -q ^DATABASE_URL= .env; then
@@ -52,6 +67,12 @@ if [ "$1" = 'frankenphp' ] || [ "$1" = 'php' ] || [ "$1" = 'bin/console' ]; then
 			php bin/console doctrine:migrations:migrate --no-interaction --all-or-nothing
 		fi
 	fi
+
+	if grep -q ^APP_ENV= dev; then
+		# build tailwind
+		php bin/console tailwind:build
+	fi
+
 
 	setfacl -R -m u:www-data:rwX -m u:"$(whoami)":rwX var
 	setfacl -dR -m u:www-data:rwX -m u:"$(whoami)":rwX var

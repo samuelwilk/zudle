@@ -1,0 +1,7 @@
+{% for i, guess in gameState.evaluatedGuesses %}
+    <div class="flex justify-center">
+        {% for letterEvaluation in guess.letterEvaluations %}
+            {{ include('game/_guess_list_item.html.twig', { letterEvaluation: letterEvaluation }) }}
+        {% endfor %}
+    </div>
+{% endfor %}

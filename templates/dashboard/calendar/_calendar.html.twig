@@ -1,0 +1,48 @@
+{% set week_days = ['S', 'M', 'T', 'W', 'T', 'F', 'S'] %}
+{% set now = "now"|date('Y-m-d') %}
+{% set first_day_of_month = now|date('Y-m-01') %}
+{% set days_in_month = now|date('t') %}
+{# Sunday has value 1 and Monday has value 7 in order to align with week days column headers #}
+{% set start_day_of_week = (first_day_of_month|date('N') == 7) ? 1 : (first_day_of_month|date('N') + 1) %}
+
+<div id="calendar">
+    <div class="grid grid-cols-7 p-5">
+        {% for day in week_days %}
+            <div class="text-center text-black dark:text-white">{{ day }}</div>
+        {% endfor %}
+    </div>
+    <hr>
+    {% set weeks = (days_in_month / 7)|round(0, 'ceil') %}
+    {% for week in 1..weeks %}
+        <div class="week grid grid-cols-7 p-5">
+            {% for dayOfWeek in 1..7 %}
+                {% set current_box = (week - 1) * 7 + dayOfWeek %}
+                {% set day_number = current_box - start_day_of_week + 1 %}
+                <div class="day-box">
+                    {% if current_box >= start_day_of_week and day_number <= days_in_month %}
+                        {% set dayClass = 'flex items-center w-16 h-16 justify-center border border-zu-gray dark:border-zu-lighter-black font-bold rounded m-1' %}
+                        {% set dayDate = (first_day_of_month|date('Y-m-') ~ day_number)|date('Y-m-d') %}
+                        {% set gamesToday = games|filter(game => game.createdAt|date('Y-m-d') == dayDate) %}
+                        <div class="flex w-full" {{ now|date('Y-m-d') == dayDate ? 'id="games_today"' : '' }}>
+                            {% if gamesToday|length %}
+                                {% for game in gamesToday %}
+                                    {{ include('dashboard/calendar/_calendar_day_item.html.twig') }}
+                                {% endfor %}
+                            {% else %}
+                                <div class="{{ dayClass ~ ' bg-zu-white dark:bg-zu-lighter-black text-white w-full' }}"></div>
+                            {% endif %}
+                        </div>
+                        <div class="text-center text-black dark:text-white">
+                            {% if now|date('Y-m-d') == dayDate %}
+                                <span class="inline-block w-2 h-2 bg-zu-red rounded-full align-middle"></span>
+                            {% endif %}
+                            {{ day_number }}
+                        </div>
+                    {% else %}
+                        <div class="empty">&nbsp;</div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
+</div>

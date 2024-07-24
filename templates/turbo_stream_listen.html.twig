@@ -1,0 +1,5 @@
+{% extends 'base.html.twig' %}
+
+{% block turbo_stream_listen %}
+    <div {{ turbo_stream_listen('App\\Entity\\Game') }}></div>
+{% endblock %}

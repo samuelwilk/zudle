@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello UserController!{% endblock %}
+
+{% block body %}
+    {% for user in userStats %}
+        <p>{{ user.username }}</p>
+    {% endfor %}
+{% endblock %}

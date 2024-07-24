@@ -1,0 +1,15 @@
+<div
+    class="grid grid-rows-{{ gameState.game.maxAttempts }} grid-cols-1 mb-12">
+    {{ include('game/_guess_list.html.twig', { gameState: gameState }) }}
+    {% set boxClass = 'p-2 m-1 w-16 h-16 flex items-center justify-center border border-black font-bold rounded' %}
+    {% set num_remaining_guesses = gameState.attemptsLeft > 0 ? gameState.attemptsLeft : 0 %}
+    {% if num_remaining_guesses > 0 %}
+        {% for i in 1..num_remaining_guesses %}
+            <div class="flex justify-center">
+                {% for j in 1..gameState.game.wordLength %}
+                    <div class="{{ boxClass }} bg-gray-100"></div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    {% endif %}
+</div>

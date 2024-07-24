@@ -27,7 +27,7 @@ build: ## Builds the Docker images
 up: ## Start the docker hub in detached mode (no logs)
 	@$(DOCKER_COMP) up --detach
 
-start: build up ## Build and start the containers
+start: build up tailwind ## Build and start the containers
 
 down: ## Stop the docker hub
 	@$(DOCKER_COMP) down --remove-orphans
@@ -72,7 +72,7 @@ entity: ## Create a new entity
 ## —— Database 🗂️️ —————————————————————————————————————————————————————————————
 database: ## Create the local dev database
 		@make database-create
-		## @make migrations-execute
+	 	@make migrations-execute
 		## @make fixtures-load
 
 database-test: ## Create the test database
@@ -92,7 +92,7 @@ fixtures-load: ## Load fixtures
 		$(SYMFONY) doctrine:fixtures:load -n --group=dev
 
 migrations-generate: ## Generate doctrine migrations
-		$(SYMFONY) doctrine:migrations:generate
+		$(SYMFONY) make:migration
 
 migrations-execute: ## Execute doctrine migrations
 		$(SYMFONY) doctrine:migrations:migrate --no-interaction
@@ -121,4 +121,7 @@ grump-run: ## Run GrumPHP
 
 grump-init: ## Initialize GrumPHP
 	@$(PHP_CONT) ./vendor/bin/grumphp git:init
+
+tailwind-watch: ## Run the Tailwind CSS watcher
+	@$(SYMFONY) tailwind:build --watch
 
