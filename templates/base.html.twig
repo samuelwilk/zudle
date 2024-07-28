@@ -13,20 +13,18 @@
         {% endblock %}
     </head>
     <body class="bg-zu-white border-zu-grey dark:bg-zu-black">
-        {{ component('TurboStreamListen') }}
+        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+            <twig:TurboStreamListen />
+        {% endif %}
 
         {# read and display all flash messages #}
         {% for label, messages in app.flashes %}
             {% for message in messages %}
-                {{ component('Alert', {
-                    'id': loop.index,
-                    'type': label,
-                    'message': message
-                }) }}
+                <twig:Alert id="{{ loop.index }}" type="{{ label }}" message="{{ message }}" />
             {% endfor %}
         {% endfor %}
 
-        {{ component('Navigation') }}
+        <twig:Navigation />
         {% block body %}
         {% endblock %}
     </body>

@@ -1,0 +1,57 @@
+<div
+    class="grid grid-rows-{{ gameState.game.maxAttempts }} grid-cols-3 mb-12">
+    <div>
+        {# show guesses here for the current guess. Arrow pointing to row in middle column #}
+    </div>
+    <div>
+        {% for i, guess in gameState.evaluatedGuesses %}
+            <div class="flex justify-center">
+                {% for letterEvaluation in guess.letterEvaluations %}
+                    {% set evaluationClass = 'p-2 m-1 w-16 h-16 flex items-center justify-center border border-black font-bold rounded' %}
+
+                    {% if letterEvaluation.evaluation == constant('App\\Enum\\LetterEvaluationEnum::CORRECT') %}
+                        {% set evaluationClass = evaluationClass ~ ' bg-correct text-white' %}
+                    {% elseif letterEvaluation.evaluation == constant('App\\Enum\\LetterEvaluationEnum::PRESENT') %}
+                        {% set evaluationClass = evaluationClass ~ ' bg-present text-white' %}
+                    {% elseif letterEvaluation.evaluation == constant('App\\Enum\\LetterEvaluationEnum::ABSENT') %}
+                        {% set evaluationClass = evaluationClass ~ ' bg-absent text-white' %}
+                    {% endif %}
+                    <div class="{{ evaluationClass }}">
+                        {{ letterEvaluation.letter }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+        {% set boxClass = 'p-2 m-1 w-16 h-16 flex items-center justify-center border border-black font-bold rounded' %}
+        {% set num_remaining_guesses = gameState.attemptsLeft > 0 ? gameState.attemptsLeft : 0 %}
+        {% if num_remaining_guesses > 0 %}
+            {% for i in 1..num_remaining_guesses %}
+                <div class="flex justify-center">
+                    {% for j in 1..gameState.game.wordLength %}
+                        <div class="{{ boxClass }} bg-gray-100"></div>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+    <div>
+        {# show who and when made this guess #}
+        {% for i, guess in gameState.game.guesses %}
+            <div class="flex justify-center">
+                <div class="flex items-center text-white bg-absent justify-between h-16 w-full p-2 px-5 m-1 rounded">
+                    <span>{{ guess.user.username }}</span>
+                    <span>{{ guess.createdAt|date('H:i') }}</span>
+                </div>
+            </div>
+        {% endfor %}
+        {% set num_remaining_guesses = gameState.attemptsLeft > 0 ? gameState.attemptsLeft : 0 %}
+        {% if num_remaining_guesses > 0 %}
+            {% for i in 1..num_remaining_guesses %}
+                <div class="flex justify-center">
+                    <div class="flex items-center text-white bg-transparent justify-between h-16 w-full p-2 px-5 m-1 rounded">
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>

@@ -7,8 +7,10 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormEvent;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\All;
+use Symfony\Component\Validator\Constraints\Count;
+use Symfony\Component\Validator\Constraints\Regex;
 
 class GuessType extends AbstractType
 {
@@ -18,7 +20,11 @@ class GuessType extends AbstractType
             ->add('guess', CollectionType::class, [
                 'entry_type' => TextType::class,
                 'entry_options' => [
-                    'attr' => ['maxlength' => 1, 'class' => 'guess-input', 'data-keyboard-target' => 'guessInput'],
+                    'attr' => [
+                        'class' => 'guess-input', 'data-keyboard-target' => 'guessInput',
+                        'disabled' => true,
+                        'maxlength' => 1,
+                    ],
                 ],
                 'getter' => function (Guess $guess) use ($options) {
                     // Initialize with empty strings or split existing guess
@@ -31,9 +37,14 @@ class GuessType extends AbstractType
                     // Combine the array of characters back into a string
                     $guess->setGuess(implode('', $submittedData));
                 },
-                'allow_add' => true,
-                'allow_delete' => true,
-                'by_reference' => false,
+                'constraints' => [
+                    new Count(['min' => $options['length'], 'max' => $options['length']]),
+                    new All([
+                        'constraints' => [
+                            new Regex(['pattern' => '/^[a-z]$/i']),
+                        ],
+                    ]),
+                ],
             ]);
     }
 
@@ -47,20 +58,20 @@ class GuessType extends AbstractType
         $resolver->setRequired(['length']);
     }
 
-    public function onPreSubmit(FormEvent $event): void
-    {
-        $data = $event->getData();
-        $form = $event->getForm();
-        $length = $form->getConfig()->getOption('length');
-        $guessWord = '';
-        for ($i = 0; $i < $length; ++$i) {
-            if (isset($data['letter'.$i])) {
-                $guessWord .= $data['letter'.$i];
-                // remove the letter from the data array
-                unset($data['letter'.$i]);
-            }
-        }
-        $data['guess'] = $guessWord;
-        $event->setData($data);
-    }
+    // public function onPreSubmit(FormEvent $event): void
+    // {
+    //    $data = $event->getData();
+    //    $form = $event->getForm();
+    //    $length = $form->getConfig()->getOption('length');
+    //    $guessWord = '';
+    //    for ($i = 0; $i < $length; ++$i) {
+    //        if (isset($data['letter'.$i])) {
+    //            $guessWord .= $data['letter'.$i];
+    //            // remove the letter from the data array
+    //            unset($data['letter'.$i]);
+    //        }
+    //    }
+    //    $data['guess'] = $guessWord;
+    //    $event->setData($data);
+    // }
 }

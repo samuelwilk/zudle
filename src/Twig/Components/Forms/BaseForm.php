@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Twig\Forms;
+namespace App\Twig\Components\Forms;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Mercure\HubInterface;

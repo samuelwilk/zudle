@@ -1,6 +1,23 @@
 <div
     class="grid grid-rows-{{ gameState.game.maxAttempts }} grid-cols-1 mb-12">
-    {{ include('game/_guess_list.html.twig', { gameState: gameState }) }}
+    {% for i, guess in gameState.evaluatedGuesses %}
+        <div class="flex justify-center">
+            {% for letterEvaluation in guess.letterEvaluations %}
+                {% set evaluationClass = 'p-2 m-1 w-16 h-16 flex items-center justify-center border border-black font-bold rounded' %}
+
+                {% if letterEvaluation.evaluation == constant('App\\Enum\\LetterEvaluationEnum::CORRECT') %}
+                    {% set evaluationClass = evaluationClass ~ ' bg-correct text-white' %}
+                {% elseif letterEvaluation.evaluation == constant('App\\Enum\\LetterEvaluationEnum::PRESENT') %}
+                    {% set evaluationClass = evaluationClass ~ ' bg-present text-white' %}
+                {% elseif letterEvaluation.evaluation == constant('App\\Enum\\LetterEvaluationEnum::ABSENT') %}
+                    {% set evaluationClass = evaluationClass ~ ' bg-absent text-white' %}
+                {% endif %}
+                <div class="{{ evaluationClass }}">
+                    {{ letterEvaluation.letter }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
     {% set boxClass = 'p-2 m-1 w-16 h-16 flex items-center justify-center border border-black font-bold rounded' %}
     {% set num_remaining_guesses = gameState.attemptsLeft > 0 ? gameState.attemptsLeft : 0 %}
     {% if num_remaining_guesses > 0 %}

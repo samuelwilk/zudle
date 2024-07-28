@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Entity\Traits\TimeStampable;
 use App\Enum\GameStatusEnum;
 use App\Repository\GameRepository;
+use App\Validator\Constraints\ValidGuessLength;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -38,6 +39,7 @@ class Game
      * @var Collection<int, Guess>
      */
     #[ORM\OneToMany(targetEntity: Guess::class, mappedBy: 'game', cascade: ['persist'], orphanRemoval: true)]
+    #[ValidGuessLength]
     private Collection $guesses;
 
     public function __construct()

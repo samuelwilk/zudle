@@ -22,10 +22,10 @@
                     {% if current_box >= start_day_of_week and day_number <= days_in_month %}
                         {% set dayClass = 'flex items-center w-16 h-16 justify-center border border-zu-gray dark:border-zu-lighter-black font-bold rounded m-1' %}
                         {% set dayDate = (first_day_of_month|date('Y-m-') ~ day_number)|date('Y-m-d') %}
-                        {% set gamesToday = games|filter(game => game.createdAt|date('Y-m-d') == dayDate) %}
+                        {% set gamesOnDay = games|filter(game => game.createdAt|date('Y-m-d') == dayDate) %}
                         <div class="flex w-full" {{ now|date('Y-m-d') == dayDate ? 'id="games_today"' : '' }}>
-                            {% if gamesToday|length %}
-                                {% for game in gamesToday %}
+                            {% if gamesOnDay|length %}
+                                {% for game in gamesOnDay %}
                                     {{ include('dashboard/calendar/_calendar_day_item.html.twig') }}
                                 {% endfor %}
                             {% else %}

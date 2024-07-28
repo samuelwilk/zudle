@@ -1,25 +1,3 @@
-{#    <nav class="bg-white shadow-md"> #}
-{#        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8"> #}
-{#            <div class="flex justify-between h-16"> #}
-{#                <div> #}
-{#                    <!-- Logo --> #}
-{#                    <img src="{{ asset('images/zu_logo_circle.png') }}" alt="Logo" class="max-h-full"> #}
-{#                </div> #}
-
-{#                <!-- Authentication Links --> #}
-{#                <div class="space-x-8 sm:flex sm:items-center sm:ml-6"> #}
-{#                    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %} #}
-{#                        <a href="{{ path('app_user') }}" class="text-sm text-gray-700 underline">Profile</a> #}
-{#                    {% else %} #}
-{#                        <a href="{{ path('hwi_oauth_service_redirect', {'service': 'google' }) }}" class="text-sm text-gray-700 underline"> #}
-{#                            Login #}
-{#                        </a> #}
-{#                    {% endif %} #}
-{#                </div> #}
-{#            </div> #}
-{#        </div> #}
-{#    </nav> #}
-
 <nav class="bg-zu-white border-zu-grey dark:bg-zu-black">
     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <a href="{{ path('app_dashboard') }}" class="flex items-center space-x-3 rtl:space-x-reverse">
@@ -49,6 +27,7 @@
                 {% else %}
                     <li>
                         <a href="{{ path('hwi_oauth_service_redirect', {'service': 'google' }) }}"
+                           data-turbo="false"
                            class="block py-2 px-3 text-zu-lighter-black rounded hover:bg-zu-red md:hover:bg-transparent md:border-0 md:hover:text-zu-red md:p-0 dark:text-zu-white md:dark:hover:text-zu-red dark:hover:bg-zu-lighter-black dark:hover:text-white md:dark:hover:bg-transparent">
                             Login
                         </a>

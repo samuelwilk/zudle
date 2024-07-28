@@ -13,7 +13,7 @@ class TabsWidget extends AbstractController
     {
     }
 
-    public string $title = 'Statistics this month';
+    public string $title = 'Wins';
 
     public array $tabs = [
         [

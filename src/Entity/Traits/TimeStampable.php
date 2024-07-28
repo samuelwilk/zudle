@@ -21,9 +21,12 @@ trait TimeStampable
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
     protected ?\DateTimeImmutable $updatedAt = null;
 
+    /**
+     * @throws \Exception
+     */
     public function getCreatedAt(): ?\DateTimeImmutable
     {
-        return $this->createdAt;
+        return $this->convertCreatedAtDateTimeToCST();
     }
 
     public function setCreatedAt(?\DateTimeImmutable $createdAt): void

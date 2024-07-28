@@ -7,7 +7,8 @@ use App\Entity\Game;
 readonly class GameState
 {
     /**
-     * @param EvaluatedGuess[] $evaluatedGuesses
+     * @param EvaluatedGuess[]    $evaluatedGuesses
+     * @param EvaluatedKeyboard[] $evaluatedKeyboard
      */
     public function __construct(
         private Game $game,

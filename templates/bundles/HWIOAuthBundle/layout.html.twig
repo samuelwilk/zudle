@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% set currentMonth = "now"|date("F") %}
+{% set currentYear = "now"|date("Y") %}
+
+{% block body %}
+    {% block hwi_oauth_content %}
+    {% endblock hwi_oauth_content %}
+{% endblock %}

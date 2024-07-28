@@ -1,4 +1,7 @@
 hwi_oauth:
+    target_path_parameter: _destination
+    use_referer: true
+
     # https://github.com/hwi/HWIOAuthBundle/blob/master/docs/2-configuring_resource_owners.md
     resource_owners:
         google:
@@ -11,3 +14,5 @@ hwi_oauth:
         account_connector: App\Security\OAuthConnector
         registration_form: App\Form\RegistrationFormType
         registration_form_handler: App\Security\RegistrationFormHandler
+
+    grant_rule: 'IS_AUTHENTICATED_FULLY'

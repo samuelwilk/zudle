@@ -29,7 +29,7 @@ services:
             $class: App\Entity\User
             $properties:
                 'google': 'google'
-                
+                    
     App\Security\OAuthConnector:
         arguments:
             $properties:

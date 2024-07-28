@@ -1,21 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello GameController!{% endblock %}
-
 {% block body %}
-    <div class="container mx-auto p-4" data-controller="keyboard"
-         data-keyboard-word-length-value="{{ gameState.game.wordLength }}"
-         data-keyboard-game-id-value="{{ gameState.game.id }}">
+    <div class="container mx-auto p-4">
         <div id="game_{{ gameState.game.id }}" {{ turbo_stream_listen('game_state') }}>
-            {{ include('game/_game_state.html.twig') }}
+            <twig:GameBoard gameState="{{ gameState }}" />
         </div>
-        {% block guess_form %}
-            {{ form_start(form, {'attr': {'data-keyboard-target': 'form', 'class': 'flex flex-row justify-center mb-12'}}) }}
-                {% for letterField in form.guess %}
-                    {{ form_widget(letterField, {'attr': {'class': 'm-1 w-16 h-16 p-0 border border-black rounded font-bold text-center'}}) }}
-                {% endfor %}
-            {{ form_end(form) }}
-        {% endblock %}
+        <twig:Form:GuessForm game="{{ gameState.game }}" />
         <div id="keyboard">
             {{ include('game/_game_keyboard.html.twig') }}
         </div>
