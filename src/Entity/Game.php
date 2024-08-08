@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Entity\Traits\TimeStampable;
 use App\Enum\GameStatusEnum;
 use App\Repository\GameRepository;
+use App\Validator\Constraints\ValidEnglishWord;
 use App\Validator\Constraints\ValidGuessLength;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -24,6 +25,7 @@ class Game
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[ValidEnglishWord]
     private ?string $word = null;
 
     #[ORM\Column]

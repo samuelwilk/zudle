@@ -20,19 +20,17 @@
                 {% set day_number = current_box - start_day_of_week + 1 %}
                 <div class="day-box">
                     {% if current_box >= start_day_of_week and day_number <= days_in_month %}
-                        {% set dayClass = 'flex items-center w-16 h-16 justify-center border border-zu-gray dark:border-zu-lighter-black font-bold rounded m-1' %}
+                        {% set dayClass = 'flex items-center w-16 h-16 justify-center border border-zu-gray dark:border-zu-light-black font-bold rounded m-1' %}
                         {% set dayDate = (first_day_of_month|date('Y-m-') ~ day_number)|date('Y-m-d') %}
-                        {% set gamesOnDay = games|filter(game => game.createdAt|date('Y-m-d') == dayDate) %}
-                        <div class="flex w-full" {{ now|date('Y-m-d') == dayDate ? 'id="games_today"' : '' }}>
+                        <div class="flex w-full flex items-center w-16 h-16" {{ now|date('Y-m-d') == dayDate ? 'id="games_today"' : '' }}>
+                            {% set gamesOnDay = games|filter(game => game.createdAt|date('Y-m-d') == dayDate) %}
                             {% if gamesOnDay|length %}
                                 {% for game in gamesOnDay %}
-                                    {{ include('dashboard/calendar/_calendar_day_item.html.twig') }}
+                                    {{ include('dashboard/calendar/_calendar_day_item.html.twig' )}}
                                 {% endfor %}
-                            {% else %}
-                                <div class="{{ dayClass ~ ' bg-zu-white dark:bg-zu-lighter-black text-white w-full' }}"></div>
                             {% endif %}
                         </div>
-                        <div class="text-center text-black dark:text-white">
+                        <div class="self-end text-center text-black dark:text-white">
                             {% if now|date('Y-m-d') == dayDate %}
                                 <span class="inline-block w-2 h-2 bg-zu-red rounded-full align-middle"></span>
                             {% endif %}

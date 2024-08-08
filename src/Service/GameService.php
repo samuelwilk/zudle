@@ -10,6 +10,7 @@ use App\Entity\Game;
 use App\Entity\Guess;
 use App\Enum\GameStatusEnum;
 use App\Enum\LetterEvaluationEnum;
+use App\Enum\StatsChartTimeFrameEnum;
 use App\Repository\GameRepository;
 use Symfony\Bundle\SecurityBundle\Security;
 
@@ -46,45 +47,6 @@ class GameService
         $this->gameRepository->update($game, true);
 
         return $game;
-    }
-
-    /**
-     * @return Game[]
-     */
-    public function getGames(): array
-    {
-        return $this->gameRepository->findAll();
-    }
-
-    public function getGamesGroupedByDayForCurrentMonth(): array
-    {
-        $gamesThisMonth = $this->gameRepository->findGamesCreatedThisMonth();
-        $groupedGames = [];
-
-        foreach ($gamesThisMonth as $game) {
-            $dayOfMonth = $game->getCreatedAt()->format('j');
-            if (!isset($groupedGames[$dayOfMonth])) {
-                $groupedGames[$dayOfMonth] = [];
-            }
-            $groupedGames[$dayOfMonth][] = $game;
-        }
-
-        return $groupedGames;
-    }
-
-    public function getGamesBetweenDates(\DateTime $start, \DateTime $end): array
-    {
-        return $this->gameRepository->findByCreationDateRange($start, $end);
-    }
-
-    private function updateGameStatus(Game $game, string $guessWord): void
-    {
-        // Implement the logic to update the game's status based on the guess
-        if ($game->getWord() === $guessWord) {
-            $game->setStatus(GameStatusEnum::WON);
-        }
-
-        // Additional logic to update the game based on the guess could be added here
     }
 
     /**
@@ -143,5 +105,55 @@ class GameService
         $isAttemptsValid = $game->getAttempts() < $game->getMaxAttempts();
 
         return $isStatusValid && $isAttemptsValid;
+    }
+
+    public function getGamesBetweenDates(\DateTime $start, \DateTime $end): array
+    {
+        return $this->gameRepository->findByCreationDateRange($start, $end);
+    }
+
+    public function countGamesBetweenDates(?\DateTime $start, ?\DateTime $end): int
+    {
+        if (is_null($start) && is_null($end)) {
+            return $this->gameRepository->count([]);
+        }
+
+        $games = $this->gameRepository->findByCreationDateRange($start, $end);
+
+        return count($games);
+    }
+
+    /**
+     * TODO: move the query to the repository.
+     */
+    public function getGamesByStatus(GameStatusEnum $gameStatusEnum): array
+    {
+        $qb = $this->gameRepository->createQueryBuilder('game')
+            ->andWhere('game.status = :status')
+            ->setParameter('status', $gameStatusEnum->value);
+
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * TODO: move the query to the repository.
+     */
+    public function getGameStatusCounts(\DateTime $start, \DateTime $end): array
+    {
+        $qb = $this->gameRepository->createQueryBuilder('game')
+            ->select('game.status, COUNT(game.id) as count')
+            ->where('game.createdAt BETWEEN :start AND :end')
+            ->setParameter('start', $start)
+            ->setParameter('end', $end)
+            ->groupBy('game.status');
+
+        $result = $qb->getQuery()->getResult();
+
+        $statusCounts = [];
+        foreach ($result as $row) {
+            $statusCounts[$row['status']] = $row['count'];
+        }
+
+        return $statusCounts;
     }
 }

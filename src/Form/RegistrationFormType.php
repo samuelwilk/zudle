@@ -15,7 +15,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 class RegistrationFormType extends AbstractType
 {
-    private const TEXT_INPUT_CLASS = 'bg-zu-white border border-zu-gray text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-zu-lighter-black dark:border-zu-gray dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500';
+    private const TEXT_INPUT_CLASS = 'bg-zu-white border border-zu-gray text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-zu-light-black dark:border-zu-gray dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500';
     private const LABEL_CLASS = 'block mb-2 text-sm font-medium text-gray-900 dark:text-white';
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {

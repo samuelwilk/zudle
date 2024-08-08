@@ -1,39 +1,22 @@
 {# Learn how to use Turbo Streams: https://github.com/symfony/ux-turbo#broadcast-doctrine-entities-update #}
 {% extends 'base.html.twig' %}
 {% block create %}
-    <turbo-stream action="append" target="games_list">
-        <template>
-            {{ include('dashboard/_game_list_item.html.twig', { game: entity }) }}
-        </template>
-    </turbo-stream>
-
     <turbo-stream action="append" target="games_today">
         <template>
+{#            {% set gamesOnDay = games|filter(game => game.createdAt|date('Y-m-d') == dayDate) %}#}
+{#            {% if gamesOnDay|length %}#}
+{#                {% for game in gamesOnDay %}#}
+{#                    {{ include('dashboard/calendar/_calendar_day_item.html.twig') }}#}
+{#                {% endfor %}#}
+{#            {% else %}#}
+{#                <div class="{{ dayClass ~ ' bg-zu-white dark:bg-zu-light-black text-white w-full' }}"></div>#}
+{#            {% endif %}#}
             {{ include('dashboard/calendar/_calendar_day_item.html.twig', { game: entity }) }}
         </template>
     </turbo-stream>
 {% endblock %}
 
 {% block update %}
-{#    <turbo-stream action="update" target="game_{{ entity.id }}">#}
-{#        <template>#}
-{#            <p class="text-white">Game has been updated</p>#}
-{#            <p class="text-white">Guesses:</p>#}
-{#            {% for guess in entity.guesses %}#}
-{#                <p class="text-white">{{ guess.guess }}</p>#}
-{#            {% endfor %}#}
-{#            <div#}
-{#                class="grid grid-rows-{{ entity.currentGameState.game.maxAttempts }} grid-cols-{{ entity.currentGameState.game.wordLength }} mb-12">#}
-{#                {{ block('guess_form') }}#}
-{#                {{ block('remaining_guesses') }}#}
-{#            </div>#}
-{#        </template>#}
-{#    </turbo-stream>#}
-
-{#    <turbo-stream action="replace" target="game_{{ entity.id }}_status">#}
-{#        <p class="text-white">WHAT THE FUCK</p>#}
-{#        {{ include('game/_game_status.html.twig', { game: entity }) }}#}
-{#    </turbo-stream>#}
 {% endblock %}
 
 {% block replace %}
@@ -45,5 +28,5 @@
 {% endblock %}
 
 {% block remove %}
-    <turbo-stream action="remove" target="game_{{ id }}"></turbo-stream>
+    <turbo-stream action="remove" target="calendar_game_{{ id }}"></turbo-stream>
 {% endblock %}

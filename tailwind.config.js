@@ -9,9 +9,10 @@ module.exports = {
       colors: {
         'zu-red': '#FF3D00',
         'zu-black': '#222222',
-        'zu-lighter-black': '#3D3D3D',
+        'zu-light-black': '#3D3D3D',
         'zu-white': '#F1F2F6',
         'zu-gray': '#7F7F7F',
+        'zu-light-gray': '#E5E7EB',
         // games
         'won': '#538D4E',
         'in-progress': '#F6AE2D',

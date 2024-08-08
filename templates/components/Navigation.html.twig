@@ -17,18 +17,18 @@
                 {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
                     <li>
                         <a href="{{ path('app_dashboard') }}"
-                           class="block py-2 px-3 text-zu-lighter-black rounded hover:bg-zu-red md:hover:bg-transparent md:border-0 md:hover:text-zu-red md:p-0 dark:text-zu-white md:dark:hover:text-zu-red dark:hover:bg-zu-lighter-black dark:hover:text-white md:dark:hover:bg-transparent"
+                           class="block py-2 px-3 text-zu-light-black rounded hover:bg-zu-red md:hover:bg-transparent md:border-0 md:hover:text-zu-red md:p-0 dark:text-zu-white md:dark:hover:text-zu-red dark:hover:bg-zu-light-black dark:hover:text-white md:dark:hover:bg-transparent"
                            aria-current="page">Home</a>
                     </li>
                     <li>
                         <a href="{{ path('app_stats') }}"
-                           class="block py-2 px-3 text-zu-lighter-black rounded hover:bg-zu-red md:hover:bg-transparent md:border-0 md:hover:text-zu-red md:p-0 dark:text-zu-white md:dark:hover:text-zu-red dark:hover:bg-zu-lighter-black dark:hover:text-white md:dark:hover:bg-transparent">Stats</a>
+                           class="block py-2 px-3 text-zu-light-black rounded hover:bg-zu-red md:hover:bg-transparent md:border-0 md:hover:text-zu-red md:p-0 dark:text-zu-white md:dark:hover:text-zu-red dark:hover:bg-zu-light-black dark:hover:text-white md:dark:hover:bg-transparent">Stats</a>
                     </li>
                 {% else %}
                     <li>
                         <a href="{{ path('hwi_oauth_service_redirect', {'service': 'google' }) }}"
                            data-turbo="false"
-                           class="block py-2 px-3 text-zu-lighter-black rounded hover:bg-zu-red md:hover:bg-transparent md:border-0 md:hover:text-zu-red md:p-0 dark:text-zu-white md:dark:hover:text-zu-red dark:hover:bg-zu-lighter-black dark:hover:text-white md:dark:hover:bg-transparent">
+                           class="block py-2 px-3 text-zu-light-black rounded hover:bg-zu-red md:hover:bg-transparent md:border-0 md:hover:text-zu-red md:p-0 dark:text-zu-white md:dark:hover:text-zu-red dark:hover:bg-zu-light-black dark:hover:text-white md:dark:hover:bg-transparent">
                             Login
                         </a>
                     </li>

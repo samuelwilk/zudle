@@ -15,8 +15,10 @@ class DashboardController extends AbstractController
     #[Route('/', name: 'app_dashboard')]
     public function dashboard(): Response
     {
+        $startOfCurrentMonth = new \DateTime('first day of this month');
+        $endOfCurrentMonth = new \DateTime('last day of this month');
         return $this->render('dashboard/index.html.twig', [
-            'games' => $this->gameService->getGames(),
+            'games' => $this->gameService->getGamesBetweenDates($startOfCurrentMonth, $endOfCurrentMonth),
         ]);
     }
 }

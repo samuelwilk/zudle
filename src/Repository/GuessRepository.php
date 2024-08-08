@@ -26,8 +26,17 @@ class GuessRepository extends BaseRepository
         $qb = $this->createQueryBuilder('guess')
             ->join('guess.user', 'user')
             ->andWhere('user.id = :userId')
-            ->setParameter('userId', $user->getId())
-        ;
+            ->setParameter('userId', $user->getId());
+
+        return $qb->getQuery()->getResult();
+    }
+
+    public function findByCreationDateRange(\DateTime $start, \DateTime $end): array
+    {
+        $qb = $this->createQueryBuilder('guess')
+            ->andWhere('guess.createdAt BETWEEN :start AND :end')
+            ->setParameter('start', $start)
+            ->setParameter('end', $end);
 
         return $qb->getQuery()->getResult();
     }
