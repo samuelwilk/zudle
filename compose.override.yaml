@@ -15,6 +15,7 @@ services:
 #      - /app/vendor
     environment:
       MERCURE_EXTRA_DIRECTIVES: demo
+      PHP_DATE_TIMEZONE: America/Regina
       # See https://xdebug.org/docs/all_settings#mode
       XDEBUG_MODE: "${XDEBUG_MODE:-off}"
     extra_hosts:

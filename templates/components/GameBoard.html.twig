@@ -40,7 +40,7 @@
             <div class="flex justify-center">
                 <div class="flex items-center text-white bg-absent justify-between h-16 w-full p-2 px-5 m-1 rounded">
                     <span>{{ guess.user.username }}</span>
-                    <span>{{ guess.createdAt|date('H:i') }}</span>
+                    <span>{{ guess.createdAt|date('H:i', 'America/Regina') }}</span>
                 </div>
             </div>
         {% endfor %}

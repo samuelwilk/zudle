@@ -1,6 +1,5 @@
 <turbo-stream action="replace" targets="#game_{{ gameState.game.id }}">
     <template>
-{#        {{ include('game/_game_state.html.twig', { gameState: gameState }) }}#}
         <twig:GameBoard gameState="{{ gameState }}" />
     </template>
 </turbo-stream>

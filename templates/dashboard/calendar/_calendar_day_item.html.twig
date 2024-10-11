@@ -10,11 +10,12 @@
 {% endif %}
 
 <a id="calendar_game_{{ game.id }}" data-popover-target="popover-default-{{ game.id }}" type="button" href="{{ path('app_game_show', {id: game.id}) }}" class="{{ dayClass }} {{ color }} grow"></a>
-<div data-popover id="popover-default-{{ game.id }}" role="tooltip" class="absolute z-10 invisible inline-block w-64 text-sm text-gray-500 transition-opacity duration-400 bg-zu-light-black border zu-light-gray rounded-lg shadow-sm opacity-0 dark:text-gray-400 dark:border-gray-600 dark:bg-zu-white">
-    <div class="px-3 py-2 bg-gray-100 border-b zu-light-gray rounded-t-lg dark:border-gray-600 dark:bg-gray-700">
-        <h3 class="font-semibold text-gray-900 dark:text-white">{{ game.createdAt|date("F d - H:i") }}</h3>
+<div data-popover id="popover-default-{{ game.id }}" role="tooltip" class="absolute z-10 invisible inline-block w-64 text-sm text-gray-500 transition-opacity duration-400 bg-zu-light-black border-zu-light-black rounded-lg dark:text-gray-400 dark:bg-zu-white dark:border-bg-zu-white">
+    <div class="px-3 py-2 border-b bg-zu-light-gray rounded-t-lg border-zu-light-gray dark:bg-zu-gray dark:border-zu-gray">
+        <h3 class="font-semibold text-gray-900 dark:text-white">{{ game.createdAt|date("F d - H:i", "America/Regina") }}</h3>
     </div>
-    <div class="px-3 py-2 flex flex-col justify-between">
+    {# TODO: when a guess is made, update the popover data #}
+    <div class="px-3 py-2 flex flex-col justify-between text-white dark:text-gray-500">
         <div class="m-2">
             {{ game.guesses|length }} of {{ game.maxAttempts }} attempts used
         </div>
@@ -29,7 +30,6 @@
                 {% endif %}
             {% elseif game.status == constant('App\\Enum\\GameStatusEnum::WON') %}
                 {% set winningGuess = game.guesses|last %}
-                {# TODO: need to hydrate this somehow #}
                 {{ winningGuess.getUser() }}
             {% elseif game.status == constant('App\\Enum\\GameStatusEnum::LOST') %}
                 House Wins
