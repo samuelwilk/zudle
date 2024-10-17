@@ -2,12 +2,18 @@
 
 namespace App\Validator\Constraints;
 
+use App\Entity\Game;
+use App\Service\WordListLoaderService;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
 class ValidEnglishWordValidator extends ConstraintValidator
 {
+    public function __construct(private readonly WordListLoaderService $wordListLoaderService)
+    {
+    }
+
     public function validate($value, Constraint $constraint): void
     {
         if (!$constraint instanceof ValidEnglishWord) {
@@ -18,28 +24,35 @@ class ValidEnglishWordValidator extends ConstraintValidator
             return;
         }
 
-        // TODO: Implement the custom validation here
+        // if this is coming from easy admin, the context object is the game
+        if ($this->context->getObject() instanceof Game) {
+            $game = $this->context->getObject();
+        } else {
+            // if this is coming from the form, the context object is the guess
+            $game = $this->context->getObject()?->getGame();
+        }
 
-        //// Initialize the Enchant broker and dictionary
-        //$broker = enchant_broker_init();
-        //$dict = enchant_broker_request_dict($broker, 'en_US');
-        //
-        //if (!$dict) {
-        //    $this->context->buildViolation('Could not initialize the dictionary.')
-        //        ->addViolation();
-        //
-        //    return;
-        //}
-        //
-        //// Check if the word is valid
-        //if (!enchant_dict_check($dict, $value)) {
-        //    $this->context->buildViolation($constraint->message)
-        //        ->setParameter('{{ string }}', $value)
-        //        ->addViolation();
-        //}
-        //
-        //// Unset the dictionary and broker objects
-        //unset($dict);
-        //unset($broker);
+        if (!$game instanceof Game) {
+            return; // nothing to validate against
+        }
+
+        // get the word length
+        $wordLength = $game->getWordLength();
+
+        // only validate if the word length is the same as the game's word length
+        if (strlen($value) !== $wordLength) {
+            return;
+        }
+
+        // Get the word list (this will use the cache to load the list)
+        $wordList = $this->wordListLoaderService->loadWordList();
+
+        // Check if the word exists in the list
+        if (!in_array(strtolower($value), $wordList, true)) {
+            $this->context->buildViolation($constraint->message)
+                ->atPath('guess')
+                ->setParameter('{{ word }}', strtolower($value))
+                ->addViolation();
+        }
     }
 }

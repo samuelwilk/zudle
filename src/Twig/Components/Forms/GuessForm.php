@@ -20,7 +20,6 @@ use Symfony\UX\LiveComponent\Attribute\LiveProp;
 use Symfony\UX\LiveComponent\ComponentToolsTrait;
 use Symfony\UX\LiveComponent\ComponentWithFormTrait;
 use Symfony\UX\LiveComponent\DefaultActionTrait;
-use Symfony\UX\LiveComponent\ValidatableComponentTrait;
 
 #[AsLiveComponent('Form:GuessForm')]
 class GuessForm extends AbstractController
@@ -28,7 +27,6 @@ class GuessForm extends AbstractController
     use DefaultActionTrait;
     use ComponentWithFormTrait;
     use ComponentToolsTrait;
-    use ValidatableComponentTrait;
 
     #[LiveProp(writable: true)]
     public array $letters = [];
@@ -37,7 +35,7 @@ class GuessForm extends AbstractController
      * The initial data used to create the form.
      */
     #[LiveProp]
-    #[Assert\Valid()]
+    #[Assert\Valid]
     public ?Game $game = null;
 
     public function mount(Game $game): void
@@ -55,7 +53,11 @@ class GuessForm extends AbstractController
 
         $length = $this->game->getWordLength();
 
-        return $this->createForm(GuessType::class, new Guess(), [
+        $guess = new Guess();
+        $guess->setGame($this->game);
+        $guess->setGuess(implode('', $this->letters));
+
+        return $this->createForm(GuessType::class, $guess, [
             'length' => $length,
         ]);
     }
@@ -66,30 +68,19 @@ class GuessForm extends AbstractController
     {
         $this->submitForm();
 
-        $this->validate();
-
-        $errors = $this->form->getErrors(true, false);
-
         $guess = implode('', $this->letters);
-        $game = $gameService->makeGuess($this->game, $guess);
 
-        // $this->render()
         try {
+            $game = $gameService->makeGuess($this->game, $guess);
+
             $hub->publish(new Update(
                 'game_state',
                 $this->renderView('game/game_state.stream.html.twig', [
                     'gameState' => $gameService->getCurrentGameState($game),
                 ])
             ));
-
-            // $hub->publish(new Update(
-            //    'game_calendar',
-            //    $this->renderView('dashboard/calendar/game_calendar.stream.html.twig', [
-            //        'games' => $this->gameService->getGames(),
-            //    ])
-            // ));
         } catch (\Exception $e) {
-            $this->addFlash('error', 'Failed to publish updates: '.$e->getMessage());
+            $this->addFlash('error', 'Unable to make guess. Please try again.');
         }
 
         return $this->redirectToRoute('app_game_show', ['id' => $game->getId()]);

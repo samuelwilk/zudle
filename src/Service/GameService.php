@@ -79,9 +79,6 @@ class GameService
         return $evaluatedGuesses;
     }
 
-    /**
-     * @throws \Exception
-     */
     public function getCurrentGameState(Game $game): GameState
     {
         $evaluatedGuesses = $this->evaluateGuesses($game->getGuesses()->toArray(), $game);

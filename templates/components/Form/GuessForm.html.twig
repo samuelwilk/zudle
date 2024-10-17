@@ -4,17 +4,22 @@
     })) }}>
     {{ form_start(form, {
         'attr': {
-            'class': 'flex flex-row justify-center mb-12',
+            'class': 'flex flex-col items-center justify-center mb-12',
             'data-action': 'live#action:prevent keydown@window->keyboard#handleKeyDown',
             'data-live-action-param': 'makeGuess',
         }
     }) }}
-        {% for letterField in form.guess %}
-            {% set letterIndex = loop.index - 1 %}
-            {{ form_widget(letterField, {'attr': {
-                'class': 'm-1 w-16 h-16 p-0 border border-black rounded font-bold text-center',
-                'data-model': 'letters.' ~ letterIndex,
-            }}) }}
-        {% endfor %}
+        <div class="flex flex-row">
+            {% for letterField in form.guess %}
+                {% set letterIndex = loop.index - 1 %}
+                {{ form_widget(letterField, {'attr': {
+                    'class': 'm-1 w-16 h-16 p-0 border border-black rounded font-bold text-center',
+                    'data-model': 'on(change)|letters.' ~ letterIndex,
+                }}) }}
+            {% endfor %}
+        </div>
+        <div class="block m-4 text-zu-red">
+            {{ form_errors(form) }}
+        </div>
     {{ form_end(form) }}
 </div>

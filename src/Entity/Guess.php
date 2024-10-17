@@ -7,6 +7,7 @@ use App\Entity\Traits\TimeStampable;
 use App\Repository\GuessRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\UX\Turbo\Attribute\Broadcast;
+use App\Validator\Constraints as zuAssert;
 
 #[ORM\Entity(repositoryClass: GuessRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -21,6 +22,7 @@ class Guess
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[zuAssert\ValidEnglishWord]
     private ?string $guess = null;
 
     #[ORM\ManyToOne(inversedBy: 'guesses')]
@@ -42,7 +44,7 @@ class Guess
         return $this->guess;
     }
 
-    public function setGuess(string $guess): static
+    public function setGuess(?string $guess): static
     {
         $this->guess = $guess;
 

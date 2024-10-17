@@ -1,7 +1,5 @@
 <?php
 
-// src/Validator/Constraints/ValidGuessLengthValidator.php
-
 namespace App\Validator\Constraints;
 
 use App\Entity\Game;
@@ -23,7 +21,7 @@ class ValidGuessLengthValidator extends ConstraintValidator
 
         /** @var Game $game */
         $game = $this->context->getObject();
-        $gameWordLength = strlen($game->getWord());
+        $gameWordLength = $game->getWordLength();
 
         foreach ($game->getGuesses() as $guess) {
             if (strlen($guess->getGuess()) !== $gameWordLength) {

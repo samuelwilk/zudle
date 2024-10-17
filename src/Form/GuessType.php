@@ -7,10 +7,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\All;
-use Symfony\Component\Validator\Constraints\Count;
-use Symfony\Component\Validator\Constraints\Regex;
 
 class GuessType extends AbstractType
 {
@@ -19,6 +17,10 @@ class GuessType extends AbstractType
         $builder
             ->add('guess', CollectionType::class, [
                 'entry_type' => TextType::class,
+                'label' => false,
+                'prototype' => true,
+                'allow_add' => false,
+                'allow_delete' => false,
                 'entry_options' => [
                     'attr' => [
                         'class' => 'guess-input', 'data-keyboard-target' => 'guessInput',
@@ -31,20 +33,17 @@ class GuessType extends AbstractType
                     $length = $options['length'];
                     $guessString = $guess->getGuess();
 
-                    return $guessString ? str_split($guessString) : array_fill(0, $length, '');
+                    if (null === $guessString) {
+                        return array_fill(0, $length, '');
+                    }
+
+                    $guessArray = str_split($guessString);
+
+                    return array_pad($guessArray, $length, '');
                 },
-                'setter' => function (Guess $guess, $submittedData) {
-                    // Combine the array of characters back into a string
-                    $guess->setGuess(implode('', $submittedData));
+                'setter' => function (Guess $guess, array $submittedData, FormInterface $form) {
+                    // setter is implemented in the GuessForm instantiateForm
                 },
-                'constraints' => [
-                    new Count(['min' => $options['length'], 'max' => $options['length']]),
-                    new All([
-                        'constraints' => [
-                            new Regex(['pattern' => '/^[a-z]$/i']),
-                        ],
-                    ]),
-                ],
             ]);
     }
 
@@ -57,21 +56,4 @@ class GuessType extends AbstractType
         $resolver->setAllowedTypes('length', 'int');
         $resolver->setRequired(['length']);
     }
-
-    // public function onPreSubmit(FormEvent $event): void
-    // {
-    //    $data = $event->getData();
-    //    $form = $event->getForm();
-    //    $length = $form->getConfig()->getOption('length');
-    //    $guessWord = '';
-    //    for ($i = 0; $i < $length; ++$i) {
-    //        if (isset($data['letter'.$i])) {
-    //            $guessWord .= $data['letter'.$i];
-    //            // remove the letter from the data array
-    //            unset($data['letter'.$i]);
-    //        }
-    //    }
-    //    $data['guess'] = $guessWord;
-    //    $event->setData($data);
-    // }
 }
